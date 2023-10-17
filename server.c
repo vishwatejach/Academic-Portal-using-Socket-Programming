@@ -38,11 +38,6 @@ int main()
 	}
 	printf("\nSocket created successfully!!");
 	
-	int reuse = 1;
-	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0) {
-	    error("setsockopt(SO_REUSEADDR) failed");
-	}
-	
 	bzero((char*) &serv_addr, sizeof(serv_addr));
 	portno = 8081;
 	
@@ -76,7 +71,12 @@ int main()
 			}
 		}
 	}
-	close(sockfd);
+	if(close(sockfd) == -1) 
+	{
+        	perror("Error closing socket");
+        	return 1;
+    	}
+	printf("\nSocket closed !!\n");
 	return 0;
 }
 
@@ -109,7 +109,7 @@ void connectionHandler(int sockfd)
 					break;
 				case 2:
 					// User is Faculty
-					//facultyHandler(sockfd);
+					facultyHandler(sockfd);
 					break;
 				case 3:
 					// User is Student
